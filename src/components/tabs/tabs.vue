@@ -1,0 +1,63 @@
+<template>
+  <div class="tabs">
+    <slot></slot>
+  </div>
+</template>
+<script>
+  export default {
+    name: '',
+    props: ['selectedTab'],
+    mounted () {
+      this.$children.forEach((vm) => {
+        vm.selectTab(this.selectedTab)
+        vm.$on('update:selectedTab', (selectedTab) => {
+          console.log('爷爷知道了')
+          this.$emit('update:selectedTab', selectedTab)
+        })
+      })
+    },
+    updated () {
+      this.$children.forEach(vm => {
+        vm.selectTab(this.selectedTab)
+      })
+    }
+  }
+</script>
+
+<style>
+  .tabs {
+  }
+
+  .tabs > ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .tabs > ol.tabs-bar {
+    display: flex;
+    border-bottom: 1px solid red;
+  }
+
+  .tabs > ol.tabs-bar > li {
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    border-bottom: 0;
+  }
+
+  .tabs > ol.tabs-bar > li:hover {
+    border-color: red;
+  }
+
+  .tabs > ol.tabs-bar > li.active {
+    border-color: blue;
+  }
+
+  .tabs > ol.tabs-content > li {
+    display: none;
+  }
+
+  .tabs > ol.tabs-content > li.active {
+    display: block;
+  }
+</style>
